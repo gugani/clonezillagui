@@ -1,0 +1,11 @@
+{
+    "name": "ClonezillaGui",
+    "version": "0.0.0",
+    "description": "Simple Clonezilla cloning software gui",
+    "dependencies": {
+        "socket.io": "latest",
+        "express": "latest",
+        "jade": "latest"
+    },
+    "author": "developer"
+}

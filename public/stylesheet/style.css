@@ -1,0 +1,73 @@
+body {
+    padding-top: 65px;
+}
+
+/* centered columns styles */
+.row-centered {
+    text-align:center;
+}
+.centered {
+    margin-left: 30%;
+    /*text-align: center;
+    margin: auto auto;*/
+}
+
+.col-fixed {
+    /* custom width */
+    width:320px;
+}
+.col-min {
+    /* custom min width */
+    min-width:320px;
+}
+.col-max {
+    /* custom max width */
+    max-width:320px;
+}
+
+.icon-small {
+    width:20px;
+    height:20px;
+}
+.icon-med {
+    width:50px;
+    height:50px;
+}
+.icon-big {
+    width:100px;
+    height:100px;
+}
+.line {
+    height: 60px;
+    width: 100%;
+}
+.inline {
+    display: inline-block;
+}
+
+.volbuttons {
+    padding-bottom: 50%;
+    padding-left: 20px;
+}
+
+#container {
+ width: 100%;
+}
+
+#led {
+ fill: #006500;
+}
+
+.device_icon{
+  margin: 0%;
+  cursor: pointer;
+  
+}
+
+.dialinput{
+	margin: 30%;
+	position: absolute;
+	
+	
+	
+}
