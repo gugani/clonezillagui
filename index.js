@@ -7,6 +7,8 @@ var app = express();
 var localhost = "127.0.0.1";
 var port = 3000;
 
+var disks;
+
 // Start the app
 // http.createServer(app).listen(3000, function() {
 //   console.log('Express app started');
