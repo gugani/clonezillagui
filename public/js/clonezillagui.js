@@ -1,6 +1,10 @@
 var socket = io.connect('http://127.0.0.1:3000');
 console.log("iosocket connected")
 
+var activehds = [];
+
+document.onload = socket.emit('guievent', { type: 'command', name: 'refresh', val: 1 } );
+
 //Server events messages
 $('#refreshbutton').on('click', function(event) {
   // event.preventDefault(); // To prevent following the link (optional)
@@ -9,9 +13,20 @@ $('#refreshbutton').on('click', function(event) {
   removedisks()
 });
 
+$('#testbutton').on('click', function(event) {
+  console.log(activehds.length);
+  for (i = 0; i < activehds.length; i++){
+    console.log(activehds[i].id);
+  }
+});
+
 $('#hdlist').on('click', '.list-group-item', function(event) {
   event.preventDefault();
-  console.log(event)
+  console.log(event);
+  activehds = document.getElementsByClassName("list-group-item active");
+  // for (i = 0; i < activehds.length; i++){
+  //   console.log(activehds[i].id);
+  // }
 });
 
 //Server events messages
