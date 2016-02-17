@@ -40,6 +40,8 @@ var io = require('socket.io').listen(app.listen(port));
 io.sockets.on('connection', function (socket) {
     console.log('User connected');
 
+    exectest();
+
     //Mensajes de sistema
     // socket.on('message', function(data){
     //     console.log("Type: " + data.type + " Subtype: " + data.subtype + " Value: " + data.val);
@@ -62,7 +64,6 @@ io.sockets.on('connection', function (socket) {
 // var exec = require('child_process').exec;
 // var child;
 
-// // executes `pwd`
 // child = exec("cat /proc/partitions", function (error, stdout, stderr) {
 //   console.log('stdout: ' + stdout);
 //   console.log('stderr: ' + stderr);
@@ -70,6 +71,8 @@ io.sockets.on('connection', function (socket) {
 //     console.log('exec error: ' + error);
 //   }
 // });
+
+
 
 
 
@@ -95,5 +98,28 @@ function get_linux_partitions(){
         }
       }
     }
+  });
+}
+
+function exectest(){
+  var exec = require('child_process').exec;
+  var child = exec('cat /var/log/monthly.out');
+  child.stdout.on('data', function(data) {
+    // console.log('stdout: ' + data);
+    // console.log(typeof(data));
+    // var sendtoclients = data;
+    // io.sockets.emit('serverevent', { type: 'consoledebug', line: sendtoclients});
+  });
+  child.stderr.on('data', function(data) {
+    console.log(typeof(data));
+    // console.log('stdout: ' + data);
+    // var sendtoclients = data;
+    // io.sockets.emit('serverevent', { type: 'consoledebug', line: sendtoclients});
+  });
+  child.on('close', function(code) {
+    console.log(typeof(data));
+    // console.log('closing code: ' + code);
+    // var sendtoclients = data;
+    // io.sockets.emit('serverevent', { type: 'consoledebug', line: sendtoclients});
   });
 }

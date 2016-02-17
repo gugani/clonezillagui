@@ -31,10 +31,14 @@ $('#hdlist').on('click', '.list-group-item', function(event) {
 
 //Server events messages
 socket.on('serverevent', function (data) {
-    console.log(data);
+    // console.log(data);
 
     if (data.type == "adddisk"){
         adddisk(data.name, data.size);
+    }
+
+    if (data.type == "consoledebug"){
+        console.log(data.line);
     }
 
 });

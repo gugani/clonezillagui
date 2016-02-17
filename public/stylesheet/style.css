@@ -51,7 +51,7 @@ body {
 }
 
 #container {
- width: 100%;
+ width: 90%;
 }
 
 #led {
@@ -61,13 +61,17 @@ body {
 .device_icon{
   margin: 0%;
   cursor: pointer;
-  
+
 }
 
 .dialinput{
 	margin: 30%;
 	position: absolute;
-	
-	
-	
+}
+
+#debugpanel {
+  width: 90%;
+  min-height: 150px;
+  position: absolute;
+  bottom: 0;
 }
