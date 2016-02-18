@@ -103,22 +103,22 @@ function get_linux_partitions(){
 
 function exectest(){
   var exec = require('child_process').exec;
-  var child = exec('cat /var/log/monthly.out');
+  var child = exec('ls /etc');
   child.stdout.on('data', function(data) {
     // console.log('stdout: ' + data);
-    // console.log(typeof(data));
-    // var sendtoclients = data;
-    // io.sockets.emit('serverevent', { type: 'consoledebug', line: sendtoclients});
+    io.sockets.emit('serverevent', { type: 'consoledebug', data: data});
+    // var lines = data.split('\n');
+    // for (i = 0; i < lines.length; i++) {
+    //   io.sockets.emit('serverevent', { type: 'consoledebug', data: lines[i]});
+    // }
   });
   child.stderr.on('data', function(data) {
-    console.log(typeof(data));
-    // console.log('stdout: ' + data);
+    console.log('stderr: ' + data);
     // var sendtoclients = data;
     // io.sockets.emit('serverevent', { type: 'consoledebug', line: sendtoclients});
   });
   child.on('close', function(code) {
-    console.log(typeof(data));
-    // console.log('closing code: ' + code);
+    console.log('closing code: ' + code);
     // var sendtoclients = data;
     // io.sockets.emit('serverevent', { type: 'consoledebug', line: sendtoclients});
   });

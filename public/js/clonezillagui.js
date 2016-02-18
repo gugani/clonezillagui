@@ -11,6 +11,7 @@ $('#refreshbutton').on('click', function(event) {
   console.log("refresh HD list!");
   socket.emit('guievent', { type: 'command', name: 'refresh', val: 1 } );
   removedisks()
+  appendto("consolecontent", "Refrescamos listado de discos");
 });
 
 $('#testbutton').on('click', function(event) {
@@ -38,7 +39,10 @@ socket.on('serverevent', function (data) {
     }
 
     if (data.type == "consoledebug"){
-        console.log(data.line);
+      var lines = data.data.split('\n');
+      for (i = 0; i < lines.length; i++) {
+        appendto("consolecontent", lines[i]);
+      }
     }
 
 });
@@ -53,4 +57,12 @@ function adddisk(name, size){
 function removedisks(){
   // document.getElementById("hdlist").innerHTML = "";
   $("#hdlist").empty()
+}
+
+function appendto(id, text){
+    var div = document.getElementById(id);
+    div.innerHTML = div.innerHTML + "<br>" + text;
+    var scrollingconsole = document.getElementById("scrollingconsole");
+    scrollingconsole.scrollTop = scrollingconsole.scrollHeight;
+    console.log(text);
 }
