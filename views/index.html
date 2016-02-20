@@ -34,23 +34,40 @@
 </nav>
 
 <div id="container" class="container-fluid">
+<!-- Parte superior - Controles   -->
   <div class="row">
+    <!-- Columna izquierda -->
     <div class="col-sm-8">
-      <button id="refreshbutton" type="button" class="btn btn-default" aria-label="Left Align">
-        <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
-      </button>
-      <button id="testbutton" type="button" class="btn btn-default" aria-label="Left Align">
-        <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
-      </button>
+      <!-- Barra de botones -->
+      <div class="row">
+        <div class="btn-group" role="group" aria-label="...">
+          <button id="refreshhdsbtn" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Refresh HDs
+          </button>
+
+          <button id="refreshimagesbtn" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Refresh Images
+          </button>
+
+          <button id="startbtn" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span> Start
+          </button>
+        </div>
+      </div>
+      <!-- Cuadro de selección de imágenes -->
+      <div class="row">
+        <div id="imageslist" class="list-group"></div>
+      </div>
     </div>
+
+    <!-- Columna derecha     -->
     <div class="col-sm-4">
-
-      <div id="hdlist" class="list-group" data-toggle="items">
-
+      <div id="hdlist" class="list-group" data-toggle="items"></div>
     </div>
 
-    </div>
   </div>
+
+  <!-- Parte inferior - Consola   -->
   <div class="row">
     <div id="debugpanel" class="panel panel-default">
       <div class="panel-heading">

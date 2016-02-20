@@ -1,6 +1,8 @@
 // Libraries
 var http = require('http');
 var express = require("express");
+var fs = require('fs'),
+    path = require('path');
 
 var app = express();
 
@@ -40,8 +42,6 @@ var io = require('socket.io').listen(app.listen(port));
 io.sockets.on('connection', function (socket) {
     console.log('User connected');
 
-    exectest();
-
     //Mensajes de sistema
     // socket.on('message', function(data){
     //     console.log("Type: " + data.type + " Subtype: " + data.subtype + " Value: " + data.val);
@@ -52,28 +52,24 @@ io.sockets.on('connection', function (socket) {
     socket.on('guievent', function (data) {
         console.log("gui event received");
         console.log("Type: " + data.type + " Name: " + data.name + " Value: " + data.val);
-        if (data.name == "refresh"){
+        if (data.name == "refreshhds"){
             get_linux_partitions()
+        }
+        else if (data.name == "refreshimagelist"){
+            var imagelist = getDirectories("/home/partimag");
+            console.log(imagelist);
+            for (i = 0; i < imagelist.length; i++) {
+              io.sockets.emit('serverevent', { type: 'addimage', name: imagelist[i]});
+            }
+        }
+        else if (data.name == "start"){
+          console.log(data);
+          for (i = 0; i < data.hdlist.length; i++){
+            console.log(data.hdlist[i]);
+          }
         }
     });
 });
-
-
-// http://nodejs.org/api.html#_child_processes
-// var util = require('util')
-// var exec = require('child_process').exec;
-// var child;
-
-// child = exec("cat /proc/partitions", function (error, stdout, stderr) {
-//   console.log('stdout: ' + stdout);
-//   console.log('stderr: ' + stderr);
-//   if (error !== null) {
-//     console.log('exec error: ' + error);
-//   }
-// });
-
-
-
 
 
 //Functions--------------------------------------------------------------------------------------------------------------
@@ -82,8 +78,8 @@ io.sockets.on('connection', function (socket) {
  * Get Linux drives
  * */
 function get_linux_partitions(){
-  fs = require('fs')
-  fs.readFile('partitions', 'utf8', function (err,data) {
+  // fs = require('fs')
+  fs.readFile('/proc/partitions', 'utf8', function (err,data) {
     if (err) {
       return console.log(err);
     }
@@ -101,6 +97,20 @@ function get_linux_partitions(){
   });
 }
 
+
+/**
+ * Get Images in /home/partimag
+ * */
+function getDirectories(srcpath) {
+  return fs.readdirSync(srcpath).filter(function(file) {
+    return fs.statSync(path.join(srcpath, file)).isDirectory();
+  });
+}
+
+
+/**
+ * Test (borrar)
+ * */
 function exectest(){
   var exec = require('child_process').exec;
   var child = exec('ls /etc');
