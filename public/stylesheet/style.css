@@ -81,3 +81,13 @@ body {
     width: 100%;
     overflow: auto;
 }
+
+#hdlist {
+  height: 500px;
+  overflow: auto;
+}
+
+#imagelist {
+  height: 200px;
+  overflow: auto;
+}

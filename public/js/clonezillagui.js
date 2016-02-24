@@ -55,6 +55,10 @@ $('#imageslist').on('click', '.list-group-item', function(event) {
   // activeimage = document.getElementsByClassName("imagelistitem list-group-item active")[0];
 });
 
+$('#createimagebtn').on('click', function(event) {
+  appendto("consolecontent", "Creando nueva imagen");
+});
+
 
 //Server events messages----------------------------------------------------------------
 socket.on('serverevent', function (data) {
