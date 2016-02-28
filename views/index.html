@@ -34,9 +34,9 @@
 
 <div id="container" class="container-fluid">
 <!-- Parte superior - Controles   -->
-  <div class="row">
+  <div id="mainarea" class="row">
     <!-- Columna izquierda -->
-    <div class="col-sm-8">
+    <div id="leftcolumn" class="col-sm-8">
       <!-- Barra de botones -->
       <div class="row">
         <div class="btn-group" role="group" aria-label="...">
@@ -58,26 +58,31 @@
         <label for="pwd">Listado de imágenes disponibles:</label>
         <div id="imageslist" class="list-group"></div>
       </div>
+      <div id="leftbottomwrapper" class="pull-down">
+        <!-- Entrada para el nombre de la nueva imagen -->
+        <div class="row">
+          <label for="pwd">Nueva imagen, introducir nombre:</label>
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Nombre para la imagen de disco...">
+            <span class="input-group-btn">
+              <button id="createimagebtn" class="btn btn-default" type="button">Go!</button>
+            </span>
+          </div>
+        </div>
 
-      <!-- Entrada para el nombre de la nueva imagen -->
-      <div class="row">
-        <label for="pwd">Nueva imagen, introducir nombre:</label>
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Nombre para la imagen de disco...">
-          <span class="input-group-btn">
-            <button id="createimagebtn" class="btn btn-default" type="button">Go!</button>
-          </span>
+
+        <!-- Password del usuario con permisos administrativos -->
+        <div class="row">
+          <div class="form-group">
+            <label for="pwd">Password:</label>
+            <input type="password" class="form-control" id="pwd">
+          </div>
         </div>
       </div>
+    </div>   <!-- Final columna izquierda -->
 
-      <!-- Password del usuario con permisos administrativos -->
-      <div class="row">
-        <div class="form-group">
-          <label for="pwd">Password:</label>
-          <input type="password" class="form-control" id="pwd">
-        </div>
-      </div>
-    </div>
+
+
 
     <!-- Columna derecha     -->
     <div class="col-sm-4">
@@ -87,7 +92,7 @@
   </div>
 
   <!-- Parte inferior - Consola   -->
-  <div class="row">
+  <div id="consolewrapper" class="row">
     <div id="debugpanel" class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Consola</h3>
@@ -99,7 +104,8 @@
       </div>
     </div>
   </div>
-</div>
+
+</div> <!-- Final container -->
 
 
 <script src= "/js/clonezillagui.js"> </script>

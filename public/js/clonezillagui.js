@@ -102,3 +102,7 @@ function appendto(id, text){
     scrollingconsole.scrollTop = scrollingconsole.scrollHeight;
     console.log(text);
 }
+
+$('.pull-down').each(function() {
+	$(this).css('margin-top', $(this).parent().height()-$(this).height())
+});
