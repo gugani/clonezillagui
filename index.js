@@ -82,7 +82,7 @@ io.sockets.on('connection', function (socket) {
 
           console.log(clonecommmand);
 
-          exec(clonecommmand, pwd);
+          exec(data.image,data.hdlist,pwd);
         }
     });
 });
@@ -127,9 +127,14 @@ function getDirectories(srcpath) {
 /**
  * Test (borrar)
  * */
-function exec(command, pwd){
+function exec(image, hdlist, pwd){
 
-  var args = [ 'sh','image_to_hds.sh'];
+  var args = [ 'sh','image_to_hds.sh',image];
+  for (i = 0; i < hdlist.length; i++){
+    // console.log(data.hdlist[i]);
+    args.push(hdlist[i]);
+  }
+
   var sudo = require('sudo');
   var options = {
       cachePassword: true,
