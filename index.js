@@ -53,9 +53,11 @@ io.sockets.on('connection', function (socket) {
         console.log("gui event received");
         console.log("Type: " + data.type + " Name: " + data.name + " Value: " + data.val);
         if (data.name == "refreshhds"){
+          // Refrescamos el listado de discos disponibles para copia
             get_linux_partitions()
         }
         else if (data.name == "refreshimagelist"){
+          // Refrescamos listado de imágenes disponibles para copia
             var imagelist = getDirectories("/home/partimag");
             console.log(imagelist);
             for (i = 0; i < imagelist.length; i++) {
@@ -63,10 +65,24 @@ io.sockets.on('connection', function (socket) {
             }
         }
         else if (data.name == "start"){
+          // Comienzo de la copia de imagen a múltiples discos
           console.log(data);
+          console.log(data.image);
+
+          var hdstring = data.hdlist.toString().replace(","," ");
+          console.log(hdstring);
+
+          var pwd = data.pwd;
+
+          var clonecommmand = ['ocs-restore-mdisks','-b', '-p', '"-g auto -e1 auto -e2 -c -r -j2 -p true"',data.image];
           for (i = 0; i < data.hdlist.length; i++){
-            console.log(data.hdlist[i]);
+            // console.log(data.hdlist[i]);
+            clonecommmand.push(data.hdlist[i]);
           }
+
+          console.log(clonecommmand);
+
+          exec(clonecommmand, pwd);
         }
     });
 });
@@ -111,19 +127,36 @@ function getDirectories(srcpath) {
 /**
  * Test (borrar)
  * */
-function exectest(){
-  var exec = require('child_process').exec;
-  var child = exec('ls /etc');
+function exec(command, pwd){
+
+  var args = [ 'sh','image_to_hds.sh'];
+  var sudo = require('sudo');
+  var options = {
+      cachePassword: true,
+      prompt: 'Password, yo? Has puesto el password.....mmmm.....nO?',
+      spawnOptions: { /* other options for spawn */ }
+  };
+  var child = sudo(args, options);
+  // var exec = require('child_process').exec;
+  // var child = exec(command);
   child.stdout.on('data', function(data) {
-    // console.log('stdout: ' + data);
-    io.sockets.emit('serverevent', { type: 'consoledebug', data: data});
+    console.log('stdout: ' + data);
+    if (data.toString().search("Starting") != -1){
+      // console.log(data.toString());
+      io.sockets.emit('serverevent', { type: 'consoledebug', data: data.toString()});
+    }
+
     // var lines = data.split('\n');
     // for (i = 0; i < lines.length; i++) {
     //   io.sockets.emit('serverevent', { type: 'consoledebug', data: lines[i]});
     // }
   });
   child.stderr.on('data', function(data) {
-    console.log('stderr: ' + data);
+    console.log('stderr: ' + data.toString());
+    if (data.toString().search("node-sudo-passwd") != -1){
+      console.log("Asking for password");
+      child.stdin.write(pwd + "\n");
+    }
     // var sendtoclients = data;
     // io.sockets.emit('serverevent', { type: 'consoledebug', line: sendtoclients});
   });

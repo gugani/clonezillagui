@@ -94,22 +94,22 @@ body {
 
 #consolewrapper {
   height: 25%;
-  background-color: green;
+  /*background-color: green;*/
 }
 
 #mainarea {
   width: 100%;
   height: 75%;
-  background-color: red;
+  /*background-color: red;*/
 }
 
 #leftbottomwrapper {
 
-  background-color: blue;
+  /*background-color: blue;*/
 }
 
 #leftcolumn {
   height: 50vh;
-  background-color: black;
+  /*background-color: black;*/
 
 }

@@ -18,18 +18,30 @@ $('#refreshhdsbtn').on('click', function(event) {
 
 $('#startbtn').on('click', function(event) {
 
-  activehds = document.getElementsByClassName("hdlistitem list-group-item active");
-  console.log(activehds.length);
-  var activehds_ = []
-  for (i = 0; i < activehds.length; i++){
-    console.log(activehds[i].id);
-    activehds_[i] = activehds[i].id;
+
+  var activehds_ = $(".hdlistitem.list-group-item.active");
+  var activeimage_ = $(".imagelistitem.list-group-item.active");
+
+  if (activehds_.length == 0){
+    alert("Seleccione discos destino para la copia.");
+  }
+  else{
+    console.log(activehds_.length);
+    for (i = 0; i < activehds_.length; i++){
+      console.log(activehds_[i].id);
+      activehds[i] = activehds_[i].id;
+    }
   }
 
-  activeimage = document.getElementsByClassName("imagelistitem list-group-item active")[0];
-  console.log(activeimage.id);
+  if (activeimage_.length == 0) {
+    alert("Seleccione una imagen como origen para la copia.");
+  }
+  else{
+    console.log("Activeimage definida: " + activeimage_[0].id);
+    activeimage = activeimage_[0].id
+  }
 
-  socket.emit('guievent', { type: 'command', name: 'start', image: activeimage.id, hdlist: activehds_} );
+  socket.emit('guievent', { type: 'command', name: 'start', image: activeimage, hdlist: activehds, pwd: $("#pwd").val()} );
 
 });
 
@@ -70,7 +82,7 @@ socket.on('serverevent', function (data) {
         addimage(data.name);
     }
     else if (data.type == "consoledebug"){
-      var lines = data.data.split('\n');
+      var lines = data.data.toString().split('\n');
       for (i = 0; i < lines.length; i++) {
         appendto("consolecontent", lines[i]);
       }
