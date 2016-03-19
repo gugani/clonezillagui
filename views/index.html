@@ -39,24 +39,29 @@
   <div id="mainarea" class="row">
     <!-- Columna izquierda -->
     <div id="leftcolumn" class="col-sm-6">
-      <div class="row blockitem">
-        <div class="btn-group" role="group" aria-label="...">
-          <button id="refreshimagesbtn" type="button" class="btn btn-default">
-            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Refresh Images
-          </button>
-          <button id="delete_image" type="button" class="btn btn-default remove-button">
-            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Borrar imagen
-          </button>
+      <!-- Grupo de botones -->
+      <div class="row blockitem buttonbar">
+        <div class="btn-group btn-group-justified" role="group" aria-label="...">
+          <div class="btn-group" role="group">
+            <button id="refreshimagesbtn" type="button" class="btn btn-default">
+              <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Refresh Images
+            </button>
+          </div>
+          <div class="btn-group" role="group">
+            <button id="remove-button" type="button" class="btn btn-default">
+              <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Borrar imagen
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- Cuadro de selección de imágenes -->
-      <div class="row blockitemgradient">
+      <div id="imagelistwrapper" class="row blockitemgradient">
         <label for="imageslist">Listado de imágenes disponibles:</label>
         <div id="imageslist" class="list-group"></div>
       </div>
 
-      <div id="leftbottomwrapper" class="pull-down">
+      <div id="leftbottomwrapper" class="">
         <!-- Entrada para el nombre de la nueva imagen -->
         <div class="row blockitemgradient">
           <label for="newimageform">Nueva imagen, introducir nombre:</label>
@@ -82,25 +87,29 @@
     <!-- Columna derecha     -->
 
     <div id="rightcolumn" class="col-sm-6">
-      <div class="row blockitem">
-        <div class="btn-group" role="group" aria-label="...">
-          <button id="refreshhdsbtn" type="button" class="btn btn-default">
-            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Refresh HDs
-          </button>
-
-          <button id="startbtn" type="button" class="btn btn-default">
-            <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span> Start
-          </button>
+      <!-- Grupo de botones -->
+      <div class="row blockitem buttonbar">
+        <div class="btn-group btn-group-justified" role="group" aria-label="...">
+          <div class="btn-group" role="group">
+            <button id="refreshhdsbtn" type="button" class="btn btn-default">
+              <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Refresh HDs
+            </button>
+          </div>
+          <div class="btn-group" role="group">
+            <button id="startbtn" type="button" class="btn btn-default">
+              <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span> Start
+            </button>
+          </div>
         </div>
       </div>
-      <div class="row blockitemgradient">
+      <div id="hdlistwrapper" class="row blockitemgradient">
         <label for="hdlist">Discos disponibles:</label>
         <div id="hdlist" class="list-group" data-toggle="items"></div>
       </div>
 
     </div> <!-- Final Columna derecha  -->
 
-  </div>
+  </div> <!-- Final mainarea  -->
 
   <!-- Parte inferior - Consola   -->
   <div id="consolewrapper" class="row">

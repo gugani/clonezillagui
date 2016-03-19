@@ -47,6 +47,8 @@ body {
 
 #container {
  width: 90%;
+ height:auto;
+ background-color: yellow;
 }
 
 #led {
@@ -65,9 +67,8 @@ body {
 }
 
 #debugpanel {
-  width: 90%;
-  min-height: 150px;
-  position: absolute;
+  width: 100%;
+  height: 100%;
   bottom: 0;
 }
 
@@ -77,25 +78,29 @@ body {
     overflow: auto;
 }
 
-#hdlist {
-  height: 500px;
+#hdlistwrapper {
+  min-height: 300px;
   overflow: auto;
+  background-color: blue;
 }
 
-#imagelist {
-  height: 200px;
+#imagelistwrapper {
+  min-height: 300px;
   overflow: auto;
+  background-color: blue;
 }
 
 #consolewrapper {
-  height: 25%;
-  /*background-color: green;*/
+  height: 20%;
+  width: 100%;
+  background-color: green;
+  bottom:0;
 }
 
 #mainarea {
   width: 100%;
-  /*height: 75%;*/
-  /*background-color: red;*/
+  height: 80%;
+  background-color: red;
 }
 
 #leftbottomwrapper {
@@ -106,11 +111,13 @@ body {
 #leftcolumn {
   background-clip: padding-box;
   border: 10px solid transparent;
+  height:auto;
 }
 
 #rightcolumn {
   background-clip: padding-box;
   border: 10px solid transparent;
+  height:auto;
 }
 
 .paddingtop_medium{
@@ -137,5 +144,9 @@ body {
     background-color: transparent;
     border-radius:5px;
     padding-bottom: 5px;
+}
 
+.buttonbar {
+  height: 40px;
+  background-color: red;
 }
