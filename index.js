@@ -54,44 +54,46 @@ io.sockets.on('connection', function (socket) {
     socket.on('guievent', function (data) {
         console.log("gui event received: ");
 
+        // Refrescamos el listado de discos disponibles para copia
         if (data.name == "refreshhds"){
-          // Refrescamos el listado de discos disponibles para copia
             get_linux_partitions()
         }
+
+        // Refrescamos listado de imágenes disponibles para copia
         else if (data.name == "refreshimagelist"){
-          // Refrescamos listado de imágenes disponibles para copia
             var imagelist = getDirectories("/home/partimag");
             console.log(imagelist);
             for (i = 0; i < imagelist.length; i++) {
               io.sockets.emit('serverevent', { type: 'addimage', name: imagelist[i]});
             }
         }
-        else if (data.name == "start_multiple_copy"){
-          // Comienzo de la copia de imagen a múltiples discos
-          console.log(data);
-          console.log(data.image);
 
-          var hdstring = data.hdlist.toString().replace(","," ");
-          console.log(hdstring);
-
-          var clonecommmand = ['ocs-restore-mdisks','-b', '-p', '"-g auto -e1 auto -e2 -c -r -j2 -p true"',data.image];
-          for (i = 0; i < data.hdlist.length; i++){
-            // console.log(data.hdlist[i]);
-            clonecommmand.push(data.hdlist[i]);
-          }
-          // Lanzamos script de copia múltiple
-          // console.log(clonecommmand);
-          status = "cloning";
-          io.sockets.emit('serverevent', { type: 'status', value: status});
-          exec_image_to_disks(data.image,data.hdlist,data.pwd);
-        }
+        // Comienzo de creación de imagen de disco
         else if (data.name == "start_crate_image"){
-          console.log("Type: " + data.type + " Name: " + data.name + " HD: " + data.hd + " Imagen: " + data.image);
-          status = "savingimage";
-          io.sockets.emit('serverevent', { type: 'status', value: status});
-          exec_disk_to_image(data.hd, data.image, data.pwd);
+          // console.log("Type: " + data.type + " Name: " + data.name + " HD: " + data.hd + " Imagen: " + data.image);
+          if (data.hd && data.image){
+            console.log("Saving image !!!");
+            status = "savingimage";
+            io.sockets.emit('serverevent', { type: 'status', value: status});
+            exec_command(data.hd, data.image, data.pwd);
+          }
         }
-    });
+
+        // Comienzo de la copia de imagen a múltiples discos
+        else if (data.name == "start_multiple_copy"){
+          console.log(data);
+          // console.log(data.image);
+          var hdstring = data.hdlist.toString().replace(","," ");
+
+          if (data.image && data.hdlist.length > 0){
+            console.log("Clonning !!!");
+            status = "cloning";
+            io.sockets.emit('serverevent', { type: 'status', value: status});
+            exec_command(data.image,data.hdlist,data.pwd);
+          }
+        }
+
+    });//End of guievents
 });
 
 
@@ -132,12 +134,11 @@ function getDirectories(srcpath) {
   });
 }
 
-/**
- * Creación de imágenes de disco
- * */
-function exec_disk_to_image(hd,image,pwd){
-  var args = [ 'sh','hd_to_image.sh',image,hd];
 
+/**
+ * Función que lanza el script correspondiente según status
+ * */
+function exec_command(arg1, arg2, pwd){
   var sudo = require('sudo');
   var options = {
       cachePassword: true,
@@ -145,76 +146,93 @@ function exec_disk_to_image(hd,image,pwd){
       spawnOptions: { /* other options for spawn */ }
   };
 
-  var child = sudo(args, options);
+  switch (status) {
+    case "savingimage":
+      var hd = arg1;
+      var image = arg2;
+      var args = [ 'sh','hd_to_image.sh',image,hd];
+      var child = sudo(args, options);
 
+
+
+      break;
+    case "savingimage":
+      var image = arg1;
+      var hdlist = arg2;
+      var args = [ 'sh','image_to_hds.sh',image];
+      for (i = 0; i < hdlist.length; i++){
+        args.push(hdlist[i]);
+      }
+      var child = sudo(args, options);
+
+
+
+      break;
+    default:
+  }//End of switch
+
+  //STDOUT
   child.stdout.on('data', function(data) {
+    //Común
     console.log('stdout: ' + data);
-    // if (data.toString().search("¿Está seguro que quiere continuar?") != -1){
-    //   console.log("¿Está seguro que quiere continuar? yessss!");
-    //   child.stdin.write("y\n");
-    // }
+    if (data.toString().search("Starting") != -1 || data.toString().search("Elapsed") != -1){
+      io.sockets.emit('serverevent', { type: 'consoledebug', data: data.toString()});
+    }
+    //Saving image
+    if (status == "savingimage"){
 
-    io.sockets.emit('serverevent', { type: 'consoledebug', data: data.toString()});
+    }
+    //Cloning
+    if (status == "Cloning"){
 
-  });
+    }
+  });//End of STDOUT
+
+  //STDERR
   child.stderr.on('data', function(data) {
+    //Común
     console.log('stderr: ' + data.toString());
     if (data.toString().search("node-sudo-passwd") != -1){
       console.log("Asking for password");
       child.stdin.write(pwd + "\n");
     }
-    io.sockets.emit('serverevent', { type: 'consoledebug', data: data.toString()});
-  });
-  child.on('close', function(code) {
-    console.log('closing code: ' + code);
-    io.sockets.emit('serverevent', { type: 'consoledebug', data: code.toString()});
-    if (status == "cloning" || status == "savingimage"){
-      status = "standby";
-      io.sockets.emit('serverevent', { type: 'status', value: status});
+
+    else if (data.toString().search("3 incorrect password attempts") != -1){
+      io.sockets.emit('serverevent', { type: 'consoledebug', data: "Password incorrecto"});
     }
-  });
-}
 
-/**
- * Copia múltiple desde imagen de disco
- * */
-function exec_image_to_disks(image, hdlist, pwd){
-
-  var args = [ 'sh','image_to_hds.sh',image];
-  for (i = 0; i < hdlist.length; i++){
-    // console.log(data.hdlist[i]);
-    args.push(hdlist[i]);
-  }
-
-  var sudo = require('sudo');
-  var options = {
-      cachePassword: true,
-      prompt: 'Password, yo? Has puesto el password.....mmmm.....nO?',
-      spawnOptions: { /* other options for spawn */ }
-  };
-
-  var child = sudo(args, options);
-
-  child.stdout.on('data', function(data) {
-    console.log('stdout: ' + data);
-    if (data.toString().search("Starting") != -1){
+    else if (data.toString().search("Starting") || data.toString().search("Elapsed")!= -1){
       // console.log(data.toString());
       io.sockets.emit('serverevent', { type: 'consoledebug', data: data.toString()});
     }
-  });
-  child.stderr.on('data', function(data) {
-    console.log('stderr: ' + data.toString());
-    if (data.toString().search("node-sudo-passwd") != -1){
-      console.log("Asking for password");
-      child.stdin.write(pwd + "\n");
+    //Saving image
+    if (status == "savingimage"){
+
     }
-  });
+    //Cloning
+    if (status == "Cloning"){
+
+    }
+  });//End of STDERR
+
+  //CLOSE
   child.on('close', function(code) {
+    //Común
     console.log('closing code: ' + code);
     if (status == "cloning" || status == "savingimage"){
       status = "standby";
+      io.sockets.emit('serverevent', { type: 'status', value: status});
+      io.sockets.emit('serverevent', { type: 'consoledebug', data: "Trabajo finalizado"});
     }
-  });
+    //Saving image
+    if (status == "savingimage"){
+
+    }
+    //Cloning
+    if (status == "Cloning"){
+
+    }
+  });//End of CLOSE
 }
 
 // Check if an element is present in an array

@@ -58,57 +58,67 @@ $('#imageslist').on('click', '.list-group-item', function(event) {
 
 // Evento comienzo de creación de imagen de disco
 $('#createimagebtn').on('click', function(event) {
-  activehds = []
-  var activehds_ = $(".hdlistitem.list-group-item.active");
+  if (status == "standby"){
+    activehds = []
+    var activehds_ = $(".hdlistitem.list-group-item.active");
 
-  if (activehds_.length == 0){
-    alert("Seleccione un disco origen.");
-  }
-  else{
-    console.log(activehds_.length);
-    for (i = 0; i < activehds_.length; i++){
-      console.log(activehds_[i].id);
-      activehds[i] = activehds_[i].id;
+    if (activehds_.length == 0){
+      alert("Seleccione un disco origen.");
     }
-  }
-  console.log("Disco origen: " + activehds);
-  if (activehds.length > 1){
-    alert("Escoger sólo un disco origen.")
-  }
-  else{
-    appendto("consolecontent", "Creando nueva imagen");
-    socket.emit('guievent', { type: 'command', name: 'start_crate_image', hd: activehds[0], image: $("#newimagename").val(), pwd: $("#pwd").val()} );
+    else{
+      console.log(activehds_.length);
+      for (i = 0; i < activehds_.length; i++){
+        console.log(activehds_[i].id);
+        activehds[i] = activehds_[i].id;
+      }
+    }
+    console.log("Disco origen: " + activehds);
+    if (activehds.length > 1){
+      alert("Escoger sólo un disco origen.")
+    }
+    else{
+      appendto("consolecontent", "Creando nueva imagen");
+      socket.emit('guievent', { type: 'command', name: 'start_crate_image', hd: activehds[0], image: $("#newimagename").val(), pwd: $("#pwd").val()} );
+    }
   }
 });
 
 // Evento comienzo de multicopia
 $('#startbtn').on('click', function(event) {
 
-  activehds = []
-  var activehds_ = $(".hdlistitem.list-group-item.active");
-  var activeimage_ = $(".imagelistitem.list-group-item.active");
+  if (status == "standby"){
+    activehds = []
+    var activehds_ = $(".hdlistitem.list-group-item.active");
+    var activeimage_ = $(".imagelistitem.list-group-item.active");
 
-  if (activehds_.length == 0){
-    alert("Seleccione discos destino para la copia.");
-  }
-  else{
-    console.log(activehds_.length);
-    for (i = 0; i < activehds_.length; i++){
-      console.log(activehds_[i].id);
-      activehds[i] = activehds_[i].id;
+    if (activehds_.length == 0){
+      alert("Seleccione discos destino para la copia.");
     }
-  }
+    else{
+      console.log(activehds_.length);
+      for (i = 0; i < activehds_.length; i++){
+        console.log(activehds_[i].id);
+        activehds[i] = activehds_[i].id;
+      }
+    }
 
-  if (activeimage_.length == 0) {
-    alert("Seleccione una imagen como origen para la copia.");
-  }
-  else{
-    console.log("Activeimage definida: " + activeimage_[0].id);
-    activeimage = activeimage_[0].id
-  }
+    if (activeimage_.length == 0) {
+      alert("Seleccione una imagen como origen para la copia.");
+    }
+    else{
+      console.log("Activeimage definida: " + activeimage_[0].id);
+      activeimage = activeimage_[0].id
+    }
 
-  socket.emit('guievent', { type: 'command', name: 'start_multiple_copy', image: activeimage, hdlist: activehds, pwd: $("#pwd").val()} );
+    socket.emit('guievent', { type: 'command', name: 'start_multiple_copy', image: activeimage, hdlist: activehds, pwd: $("#pwd").val()} );
 
+  }
+});
+
+// Borrado de imágenes
+$("#rm_test_disk").on('click', function(event) {
+  event.preventDefault();
+  console.log("delete");
 });
 
 
@@ -137,7 +147,7 @@ socket.on('serverevent', function (data) {
         }
         else if (data.value == "standby") {
           appendto("consolecontent", "Qi Replicator preparada");
-        }        
+        }
       }
       status = data.value;
       console.log("Status: " + data.value);
@@ -146,6 +156,13 @@ socket.on('serverevent', function (data) {
 
 
 //Utils-----------------------------------------------------------------------------------
+function addimage(name){
+  $("#imageslist").append('<a id="' + name + '"href="#" class="imagelistitem list-group-item">' + name + '<button id="rm_' + name + '" type="button" class="btn btn-danger remove-button pull-right">Borrar</button></a>');
+
+  //
+  console.log("addimage");
+}
+
 function adddisk(name, size){
   $("#hdlist").append('<a id="' + name + '"href="#" class="hdlistitem list-group-item">' + name + ' - ' + size + ' Kb</a>');
   console.log("adddisk");
@@ -155,11 +172,6 @@ function emptygrouplist(id){
   // document.getElementById("hdlist").innerHTML = "";
   // $("#hdlist").empty();
   $('#' + id).empty()
-}
-
-function addimage(name){
-  $("#imageslist").append('<a id="' + name + '"href="#" class="imagelistitem list-group-item">' + name + '</a>');
-  console.log("addimage");
 }
 
 function appendto(id, text){
