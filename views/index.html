@@ -33,36 +33,32 @@
 <div id="container" class="container-fluid">
 
   <!-- Barra de botones -->
-  <div class="row paddingtop_medium">
-    <div class="btn-group" role="group" aria-label="...">
-      <button id="refreshhdsbtn" type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Refresh HDs
-      </button>
 
-      <button id="refreshimagesbtn" type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Refresh Images
-      </button>
-
-      <button id="startbtn" type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span> Start
-      </button>
-    </div>
-  </div>
 
   <!-- Parte superior - Controles   -->
   <div id="mainarea" class="row">
     <!-- Columna izquierda -->
-    <div id="leftcolumn" class="col-sm-8 paddingtop_medium">
+    <div id="leftcolumn" class="col-sm-6">
+      <div class="row blockitem">
+        <div class="btn-group" role="group" aria-label="...">
+          <button id="refreshimagesbtn" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Refresh Images
+          </button>
+          <button id="delete_image" type="button" class="btn btn-default remove-button">
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Borrar imagen
+          </button>
+        </div>
+      </div>
 
       <!-- Cuadro de selección de imágenes -->
-      <div class="row">
+      <div class="row blockitemgradient">
         <label for="imageslist">Listado de imágenes disponibles:</label>
         <div id="imageslist" class="list-group"></div>
       </div>
 
       <div id="leftbottomwrapper" class="pull-down">
         <!-- Entrada para el nombre de la nueva imagen -->
-        <div class="row">
+        <div class="row blockitemgradient">
           <label for="newimageform">Nueva imagen, introducir nombre:</label>
           <div id="newimageform" class="input-group">
             <input id="newimagename" type="text" class="form-control" placeholder="Nombre para la imagen de disco...">
@@ -73,7 +69,7 @@
         </div>
 
         <!-- Password del usuario con permisos administrativos -->
-        <div class="row paddingtop_medium">
+        <div class="row blockitemgradient">
           <div class="form-group">
             <label for="pwd">Password:</label>
             <input type="password" class="form-control" id="pwd">
@@ -84,9 +80,24 @@
     </div>   <!-- Final columna izquierda -->
 
     <!-- Columna derecha     -->
-    <div class="col-sm-4 paddingtop_medium">
-      <label for="hdlist">Discos disponibles:</label>
-      <div id="hdlist" class="list-group" data-toggle="items"></div>
+
+    <div id="rightcolumn" class="col-sm-6">
+      <div class="row blockitem">
+        <div class="btn-group" role="group" aria-label="...">
+          <button id="refreshhdsbtn" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Refresh HDs
+          </button>
+
+          <button id="startbtn" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span> Start
+          </button>
+        </div>
+      </div>
+      <div class="row blockitemgradient">
+        <label for="hdlist">Discos disponibles:</label>
+        <div id="hdlist" class="list-group" data-toggle="items"></div>
+      </div>
+
     </div> <!-- Final Columna derecha  -->
 
   </div>

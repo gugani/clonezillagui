@@ -93,6 +93,10 @@ io.sockets.on('connection', function (socket) {
           }
         }
 
+        else if (data.name == "delete_image"){
+          console.log("Delete image");
+        }
+
     });//End of guievents
 });
 

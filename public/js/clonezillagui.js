@@ -1,4 +1,4 @@
-var socket = io.connect('http://127.0.0.1:3000');
+var socket = io.connect('http://192.168.1.155:3000');
 console.log("iosocket connected")
 
 var activehds = [];
@@ -116,7 +116,7 @@ $('#startbtn').on('click', function(event) {
 });
 
 // Borrado de imágenes
-$("#rm_test_disk").on('click', function(event) {
+$(".remove-button").on('click', function(event) {
   event.preventDefault();
   console.log("delete");
 });
@@ -157,7 +157,8 @@ socket.on('serverevent', function (data) {
 
 //Utils-----------------------------------------------------------------------------------
 function addimage(name){
-  $("#imageslist").append('<a id="' + name + '"href="#" class="imagelistitem list-group-item">' + name + '<button id="rm_' + name + '" type="button" class="btn btn-danger remove-button pull-right">Borrar</button></a>');
+  // $("#imageslist").append('<a id="' + name + '"href="#" class="imagelistitem list-group-item">' + name + '<button id="rm_' + name + '" type="button" class="btn btn-danger remove-button pull-right">Borrar</button></a>');
+  $("#imageslist").append('<a id="' + name + '"href="#" class="imagelistitem list-group-item">' + name + '</a>');
 
   //
   console.log("addimage");
