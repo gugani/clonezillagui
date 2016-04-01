@@ -1,4 +1,4 @@
-var socket = io.connect('http://192.168.1.155:3000');
+var socket = io.connect('http://192.168.21.112:3000');
 console.log("iosocket connected")
 
 var activehds = [];
@@ -107,7 +107,7 @@ $('#startbtn').on('click', function(event) {
     }
     else{
       console.log("Activeimage definida: " + activeimage_[0].id);
-      activeimage = activeimage_[0].id
+      activeimage = activeimage_[0].id;
     }
 
     socket.emit('guievent', { type: 'command', name: 'start_multiple_copy', image: activeimage, hdlist: activehds, pwd: $("#pwd").val()} );
@@ -116,9 +116,21 @@ $('#startbtn').on('click', function(event) {
 });
 
 // Borrado de imágenes
-$(".remove-button").on('click', function(event) {
+$("#remove-button").on('click', function(event) {
   event.preventDefault();
-  console.log("delete");
+  var activeimage_ = $(".imagelistitem.list-group-item.active");
+  if (activeimage_.length == 0) {
+    alert("Seleccione la imagen que desee borrar.");
+  }
+  else if ($("#pwd").val().length == 0) {
+    alert("Debes indicar el password");
+  }
+  else{
+    console.log("Activeimage definida: " + activeimage_[0].id);
+    activeimage = activeimage_[0].id;
+    console.log("delete");
+    socket.emit('guievent', { type: 'command', name: 'delete_image', image: activeimage, pwd: $("#pwd").val()} );
+  }
 });
 
 

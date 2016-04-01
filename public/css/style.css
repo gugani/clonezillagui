@@ -48,7 +48,7 @@ body {
 #container {
  width: 90%;
  height:auto;
- background-color: yellow;
+ /*background-color: yellow;*/
 }
 
 #led {
@@ -78,29 +78,36 @@ body {
     overflow: auto;
 }
 
-#hdlistwrapper {
-  min-height: 300px;
+#hdlist {
+  height: 448px;
   overflow: auto;
-  background-color: blue;
+  /*background-color: blue;*/
+}
+
+#imageslist {
+  height: 280px;
+  overflow: auto;
+  /*background-color: blue;*/
 }
 
 #imagelistwrapper {
   min-height: 300px;
   overflow: auto;
-  background-color: blue;
+  /*background-color: blue;*/
 }
 
 #consolewrapper {
   height: 20%;
   width: 100%;
-  background-color: green;
+  /*background-color: green;*/
   bottom:0;
+  padding: 10px;
 }
 
 #mainarea {
   width: 100%;
-  height: 80%;
-  background-color: red;
+  height: 560px;
+  /*background-color: red;*/
 }
 
 #leftbottomwrapper {
@@ -138,6 +145,9 @@ body {
     background-repeat: repeat;
     border-radius:3px;
     padding: 5px;
+    border-color: silver;
+    border-style: solid;
+    border-width: 1px;
 }
 
 .blockitem {
@@ -148,5 +158,9 @@ body {
 
 .buttonbar {
   height: 40px;
-  background-color: red;
+  /*background-color: red;*/
+}
+
+.margintop{
+  margin-top: 5px;
 }

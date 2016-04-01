@@ -95,6 +95,7 @@ io.sockets.on('connection', function (socket) {
 
         else if (data.name == "delete_image"){
           console.log("Delete image");
+          console.log(data);
         }
 
     });//End of guievents
