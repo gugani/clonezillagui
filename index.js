@@ -94,8 +94,10 @@ io.sockets.on('connection', function (socket) {
         }
 
         else if (data.name == "delete_image"){
+
           console.log("Delete image");
           console.log(data);
+          delete_image(data.image, data.pwd);
         }
 
     });//End of guievents
@@ -152,16 +154,15 @@ function exec_command(arg1, arg2, pwd){
   };
 
   switch (status) {
+
     case "savingimage":
       var hd = arg1;
       var image = arg2;
       var args = [ 'sh','hd_to_image.sh',image,hd];
       var child = sudo(args, options);
-
-
-
       break;
-    case "savingimage":
+
+    case "cloning":
       var image = arg1;
       var hdlist = arg2;
       var args = [ 'sh','image_to_hds.sh',image];
@@ -169,11 +170,10 @@ function exec_command(arg1, arg2, pwd){
         args.push(hdlist[i]);
       }
       var child = sudo(args, options);
-
-
-
       break;
+
     default:
+      console.log("No debería estar aquí");
   }//End of switch
 
   //STDOUT
@@ -188,7 +188,7 @@ function exec_command(arg1, arg2, pwd){
 
     }
     //Cloning
-    if (status == "Cloning"){
+    if (status == "cloning"){
 
     }
   });//End of STDOUT
@@ -215,7 +215,7 @@ function exec_command(arg1, arg2, pwd){
 
     }
     //Cloning
-    if (status == "Cloning"){
+    if (status == "cloning"){
 
     }
   });//End of STDERR
@@ -231,14 +231,63 @@ function exec_command(arg1, arg2, pwd){
     }
     //Saving image
     if (status == "savingimage"){
-
+      io.sockets.emit('serverevent', { type: "command", name: 'update_imagelist', val: ""});
     }
     //Cloning
-    if (status == "Cloning"){
+    if (status == "cloning"){
 
     }
   });//End of CLOSE
+} //End of exec_command
+
+
+/**
+ * Función que elimina imágenes de disco ubicadas en /home/partimag
+ * */
+
+function delete_image(arg1, pwd){
+  console.log("Delete Image: " + arg1);
+  var sudo = require('sudo');
+  var options = {
+      cachePassword: true,
+      prompt: 'Password, yo? Has puesto el password.....mmmm.....nO?',
+      spawnOptions: { /* other options for spawn */ }
+  };
+
+  var image_name = arg1;
+  var args = [ 'sh','delete_folder.sh',"/home/partimag/" + image_name];
+  var child = sudo(args, options);
+
+  //STDOUT
+  child.stdout.on('data', function(data) {
+    console.log('stdout: ' + data);
+
+  });//End of STDOUT
+
+  //STDERR
+  child.stderr.on('data', function(data) {
+    console.log('stderr: ' + data.toString());
+    if (data.toString().search("node-sudo-passwd") != -1){
+      console.log("Asking for password");
+      child.stdin.write(pwd + "\n");
+    }
+
+    else if (data.toString().search("3 incorrect password attempts") != -1){
+      io.sockets.emit('serverevent', { type: 'consoledebug', data: "Password incorrecto"});
+    }
+
+  });//End of STDERR
+
+  //CLOSE
+  child.on('close', function(code) {
+    console.log('closing code: ' + code);
+    io.sockets.emit('serverevent', { type: "command", name: 'update_imagelist', val: ""});
+    io.sockets.emit('serverevent', { type: 'consoledebug', data: "Borramos imagen de disco: " + image_name});
+
+  });//End of CLOSE
 }
+
+
 
 // Check if an element is present in an array
 function isInArray(value, array) {

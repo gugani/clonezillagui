@@ -1,4 +1,6 @@
-var socket = io.connect('http://192.168.21.112:3000');
+var ip = location.host;
+var socket = io.connect('http://' + ip);
+// var socket = io.connect('http://192.168.21.112:3000');
 console.log("iosocket connected")
 
 var activehds = [];
@@ -118,6 +120,7 @@ $('#startbtn').on('click', function(event) {
 // Borrado de imágenes
 $("#remove-button").on('click', function(event) {
   event.preventDefault();
+  var x;
   var activeimage_ = $(".imagelistitem.list-group-item.active");
   if (activeimage_.length == 0) {
     alert("Seleccione la imagen que desee borrar.");
@@ -126,10 +129,14 @@ $("#remove-button").on('click', function(event) {
     alert("Debes indicar el password");
   }
   else{
-    console.log("Activeimage definida: " + activeimage_[0].id);
-    activeimage = activeimage_[0].id;
-    console.log("delete");
-    socket.emit('guievent', { type: 'command', name: 'delete_image', image: activeimage, pwd: $("#pwd").val()} );
+    if (confirm("Desea borrar la imagen de disco " + activeimage_[0].id) == true) {
+      console.log("Activeimage definida: " + activeimage_[0].id);
+      activeimage = activeimage_[0].id;
+      console.log("delete");
+      socket.emit('guievent', { type: 'command', name: 'delete_image', image: activeimage, pwd: $("#pwd").val()} );
+    } else {
+        console.log("Operación de borrado de imagen de disco cancelada");
+    }
   }
 });
 
@@ -161,8 +168,38 @@ socket.on('serverevent', function (data) {
           appendto("consolecontent", "Qi Replicator preparada");
         }
       }
+
+
       status = data.value;
+
+      switch (status) {
+        case "cloning":
+          $("#statuslabel").removeClass();
+          $("#statuslabel").addClass("label label-danger")
+          $("#statuslabel").html("Clonando");
+          break;
+        case "savingimage":
+          $("#statuslabel").removeClass();
+          $("#statuslabel").addClass("label label-danger")
+          $("#statuslabel").html("Guardando imagen");
+          break;
+        case "standby":
+          $("#statuslabel").removeClass();
+          $("#statuslabel").addClass("label label-success")
+          $("#statuslabel").html("En espera");
+          break;
+        default:
+
+      }
       console.log("Status: " + data.value);
+    }
+    else if (data.type == "command") {
+      if (data.name == "update_imagelist") {
+        console.log("refresh images list!");
+        socket.emit('guievent', { type: 'command', name: 'refreshimagelist', val: 1 } );
+        emptygrouplist("imageslist")
+        // appendto("consolecontent", "Refrescamos listado de imágenes");
+      }
     }
 });
 
