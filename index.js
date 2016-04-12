@@ -227,11 +227,12 @@ function exec_command(arg1, arg2, pwd){
     if (status == "cloning" || status == "savingimage"){
       status = "standby";
       io.sockets.emit('serverevent', { type: 'status', value: status});
+      io.sockets.emit('serverevent', { type: "command", name: 'update_imagelist', val: ""});
       io.sockets.emit('serverevent', { type: 'consoledebug', data: "Trabajo finalizado"});
     }
     //Saving image
     if (status == "savingimage"){
-      io.sockets.emit('serverevent', { type: "command", name: 'update_imagelist', val: ""});
+
     }
     //Cloning
     if (status == "cloning"){

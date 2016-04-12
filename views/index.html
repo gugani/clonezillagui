@@ -65,6 +65,11 @@
               <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Borrar imagen
             </button>
           </div>
+          <div class="btn-group" role="group">
+            <button id="createimagebtn" type="button" class="btn btn-default">
+              <span class="glyphicon glyphicon-export" aria-hidden="true"></span> Crear imagen
+            </button>
+          </div>
         </div>
       </div>
 
@@ -76,13 +81,17 @@
 
       <div id="leftbottomwrapper" class="">
         <!-- Entrada para el nombre de la nueva imagen -->
-        <div class="row blockitemgradient margintop">
+        <!-- <div class="row blockitemgradient margintop">
           <label for="newimageform">Nueva imagen, introducir nombre:</label>
           <div id="newimageform" class="input-group">
             <input id="newimagename" type="text" class="form-control" placeholder="Nombre para la imagen de disco...">
-            <span class="input-group-btn">
-              <button id="createimagebtn" class="btn btn-default" type="button">Crear imagen</button>
-            </span>
+          </div>
+        </div> -->
+
+        <div class="row blockitemgradient margintop">
+          <div class="form-group">
+            <label for="pwd">Nueva imagen, introducir nombre:</label>
+            <input id="newimagename" type="text" class="form-control" placeholder="Nombre para la imagen de disco...">
           </div>
         </div>
 
@@ -110,7 +119,7 @@
           </div>
           <div class="btn-group" role="group">
             <button id="startbtn" type="button" class="btn btn-default">
-              <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span> Start
+              <span class="glyphicon glyphicon-import" aria-hidden="true"></span> Start
             </button>
           </div>
         </div>

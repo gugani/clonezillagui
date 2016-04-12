@@ -28,7 +28,7 @@ document.onload = socket.emit('guievent', { type: 'command', name: 'refreshimage
 $('#refreshimagesbtn').on('click', function(event) {
   console.log("refresh images list!");
   socket.emit('guievent', { type: 'command', name: 'refreshimagelist', val: 1 } );
-  emptygrouplist("imageslist")
+  emptygrouplist("imageslist");
   appendto("consolecontent", "Refrescamos listado de imágenes");
 });
 
@@ -197,7 +197,7 @@ socket.on('serverevent', function (data) {
       if (data.name == "update_imagelist") {
         console.log("refresh images list!");
         socket.emit('guievent', { type: 'command', name: 'refreshimagelist', val: 1 } );
-        emptygrouplist("imageslist")
+        emptygrouplist("imageslist");
         // appendto("consolecontent", "Refrescamos listado de imágenes");
       }
     }
