@@ -228,6 +228,7 @@ function appendto(id, text){
     var div = document.getElementById(id);
     div.innerHTML = div.innerHTML + "<br>" + text;
     var scrollingconsole = document.getElementById("scrollingconsole");
+    // var scrollingconsole = document.getElementById("debugpanel");
     scrollingconsole.scrollTop = scrollingconsole.scrollHeight;
     console.log(text);
 }

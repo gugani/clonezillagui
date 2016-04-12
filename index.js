@@ -180,9 +180,23 @@ function exec_command(arg1, arg2, pwd){
   child.stdout.on('data', function(data) {
     //Común
     console.log('stdout: ' + data);
-    if (data.toString().search("Starting") != -1 || data.toString().search("Elapsed") != -1){
-      io.sockets.emit('serverevent', { type: 'consoledebug', data: data.toString()});
+    if (data.toString().search("Starting") != -1 ||
+        data.toString().search("Elapsed") != -1 ||
+        data.toString().search("Checking") != -1 ||
+        data.toString().search("Finished") != -1 ||
+        data.toString().search("partition") != -1 ||
+        data.toString().search("Saving") != -1 ||
+        data.toString().search("sd") != -1 ||
+        data.toString().search("NTFS") != -1 ||
+        data.toString().search("fail") != -1 ||
+        data.toString().search("error") != -1
+      )
+      {io.sockets.emit('serverevent', { type: 'consoledebug', data: data.toString()});}
+    if (data.toString().search('Pulse "Intro" para continuar......') != -1){
+      console.log("Algo pasó.... Pulsames enter");
+      child.stdin.write("\n");
     }
+    // io.sockets.emit('serverevent', { type: 'consoledebug', data: data.toString()});
     //Saving image
     if (status == "savingimage"){
 
